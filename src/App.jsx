@@ -7,8 +7,11 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showExpensive, setShowExpensive] = useState(false);
   const [cart, setCart] = useState(() => {
-  const savedCart = localStorage.getItem("cart");
-  return savedCart ? JSON.parse(savedCart) : [];
+  if (typeof window !== "undefined") {
+    const savedCart = localStorage.getItem("cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  }
+  return [];
 });
 
   useEffect(() => {
@@ -22,7 +25,9 @@ function App() {
         setLoading(false);
       }
     };
-  localStorage.setItem("cart", JSON.stringify(cart));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
     fetchProducts();
   }, [cart]);
   
